@@ -506,7 +506,7 @@
     border:2px solid var(--line);
     border-radius:12px;
     padding:8px 10px;
-    min-height:42px;
+    min-height:52px;
   }
 
   .prize.big{
@@ -515,13 +515,16 @@
 
   .prize strong{
     display:block;
-    font-size:14px;
+    font-size:12px;
+    line-height:1.1;
     text-transform:uppercase;
+    white-space:normal;
+    overflow-wrap:break-word;
   }
 
   .prize span{
     display:block;
-    margin-top:3px;
+    margin-top:4px;
     font-size:10px;
     text-transform:uppercase;
     letter-spacing:.08em;
@@ -544,7 +547,7 @@
   }
 
   .card{
-    width:700px;
+    width:760px;
     padding:24px;
     background:#10202b;
     border:3px solid #2f4a5c;
@@ -571,8 +574,8 @@
 
   .cardSub{
     margin-top:10px;
-    font-size:28px;
-    line-height:1;
+    font-size:24px;
+    line-height:1.1;
     font-weight:900;
     text-transform:uppercase;
     color:var(--gold);
@@ -665,10 +668,10 @@
       <div class="panel">
         <div class="t">Prémios</div>
         <div class="prizes">
-          <div class="prize big"><strong>6 shots + 6 finos</strong><span>Grande prémio</span></div>
-          <div class="prize"><strong>12 shots</strong><span>Top prémio</span></div>
-          <div class="prize"><strong>6 shots</strong><span>Prémio</span></div>
-          <div class="prize"><strong>3 shots</strong><span>Prémio</span></div>
+          <div class="prize big"><strong>10 Shots de Smirnoff Spicy Tamarino</strong><span>Grande prémio</span></div>
+          <div class="prize"><strong>12 Shots de Smirnoff Spicy Tamarino</strong><span>Top prémio</span></div>
+          <div class="prize"><strong>6 Shots de Smirnoff Spicy Tamarino</strong><span>Prémio</span></div>
+          <div class="prize"><strong>3 Shots de Smirnoff Spicy Tamarino</strong><span>Prémio</span></div>
         </div>
       </div>
     </div>
@@ -721,10 +724,10 @@
 
   function weightedPrize(){
     var r = Math.random();
-    if(r < 0.60) return '3 Shots';
-    if(r < 0.90) return '6 Shots';
-    if(r < 0.95) return '12 Shots';
-    return '6 Shots + 6 Finos';
+    if(r < 0.60) return '3 Shots de Smirnoff Spicy Tamarino';
+    if(r < 0.90) return '6 Shots de Smirnoff Spicy Tamarino';
+    if(r < 0.95) return '12 Shots de Smirnoff Spicy Tamarino';
+    return '10 Shots de Smirnoff Spicy Tamarino';
   }
 
   function goalChance(value, sameSide){
