@@ -3,19 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Cheers O Bar - Roleta Red Bull Lite</title>
+  <title>Cheers O Bar - Roleta Red Bull Dark Lite</title>
   <style>
     :root{
-      --bg:#050914;
-      --bg2:#0a1631;
-      --gold:#ffd300;
-      --red:#e21b4d;
-      --blue:#223971;
-      --blue2:#17305f;
-      --text:#f4f7ff;
-      --muted:#b9c3de;
-      --panel:rgba(255,255,255,.06);
+      --bg:#020508;
+      --bg2:#07111a;
+      --text:#eef3ff;
+      --muted:#93a4c7;
       --line:rgba(255,255,255,.08);
+      --panel:rgba(8,14,22,.84);
+
+      --gold:#d8b11e;
+      --red:#9f1738;
+      --red2:#c11f45;
+      --blue:#16315d;
+      --blue2:#0f2445;
+      --green:#0f4c47;
+      --green2:#146158;
     }
 
     *{
@@ -37,11 +41,27 @@
       font-family: Arial, Helvetica, sans-serif;
       color:var(--text);
       background:
-        radial-gradient(circle at 50% 0%, rgba(255,211,0,.08), transparent 18%),
-        radial-gradient(circle at 15% 20%, rgba(226,27,77,.08), transparent 22%),
-        radial-gradient(circle at 85% 20%, rgba(34,57,113,.16), transparent 26%),
-        linear-gradient(180deg, #02050b 0%, #07101d 55%, #03060d 100%);
+        radial-gradient(circle at 50% 0%, rgba(18,98,87,.12), transparent 18%),
+        radial-gradient(circle at 12% 18%, rgba(159,23,56,.12), transparent 22%),
+        radial-gradient(circle at 88% 18%, rgba(22,49,93,.20), transparent 26%),
+        linear-gradient(180deg, #000 0%, #02070d 45%, #000 100%);
       cursor:none;
+    }
+
+    .flash{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:0;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,.08), transparent 28%),
+        radial-gradient(circle at 50% 50%, rgba(20,97,88,.10), transparent 55%),
+        radial-gradient(circle at 50% 50%, rgba(193,31,69,.08), transparent 72%);
+      mix-blend-mode: screen;
+    }
+
+    .flash.active{
+      animation: screenFlash .22s linear infinite;
     }
 
     .app{
@@ -65,8 +85,8 @@
       display:flex;
       align-items:center;
       justify-content:space-between;
-      padding:14px 18px;
       gap:18px;
+      padding:14px 18px;
     }
 
     .brand{
@@ -82,9 +102,9 @@
       border-radius:50%;
       position:relative;
       background:
-        radial-gradient(circle at 50% 50%, rgba(255,211,0,.95) 0 30%, transparent 31%),
-        linear-gradient(145deg, rgba(255,255,255,.14), rgba(255,255,255,.04));
-      border:1px solid rgba(255,255,255,.14);
+        radial-gradient(circle at 50% 50%, rgba(216,177,30,.95) 0 30%, transparent 31%),
+        linear-gradient(145deg, rgba(255,255,255,.10), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.12);
       flex:0 0 auto;
     }
 
@@ -95,7 +115,7 @@
       top:20px;
       width:16px;
       height:10px;
-      background:var(--red);
+      background:var(--red2);
       border-radius:18px 18px 4px 4px;
     }
 
@@ -124,15 +144,15 @@
       text-transform:uppercase;
       line-height:1;
       font-weight:800;
-    }
-
-    .title strong{
-      font-size:clamp(22px, 1.7vw, 32px);
       letter-spacing:.04em;
     }
 
+    .title strong{
+      font-size:clamp(22px, 1.65vw, 32px);
+    }
+
     .cta{
-      font-size:clamp(22px, 1.7vw, 32px);
+      font-size:clamp(22px, 1.65vw, 32px);
       text-align:right;
       white-space:nowrap;
     }
@@ -170,7 +190,7 @@
       gap:12px;
       padding:14px;
       border-radius:16px;
-      background:rgba(255,255,255,.04);
+      background:rgba(255,255,255,.035);
       border:1px solid rgba(255,255,255,.05);
       font-size:22px;
       font-weight:700;
@@ -181,13 +201,16 @@
       height:12px;
       border-radius:50%;
       flex:0 0 auto;
+      box-shadow:0 0 10px currentColor;
     }
 
     .arena{
       min-height:0;
       border-radius:32px;
       border:1px solid var(--line);
-      background:rgba(255,255,255,.02);
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,.02), transparent 52%),
+        rgba(255,255,255,.015);
       display:grid;
       place-items:center;
       position:relative;
@@ -196,7 +219,7 @@
 
     .wheel-stage{
       position:relative;
-      width:min(80vh, 76vw, 1120px);
+      width:min(72vh, 68vw, 1000px);
       aspect-ratio:1;
       display:grid;
       place-items:center;
@@ -204,27 +227,27 @@
 
     .pointer{
       position:absolute;
-      top:-8px;
+      top:-10px;
       left:50%;
       transform:translateX(-50%);
       width:0;
       height:0;
-      border-left:34px solid transparent;
-      border-right:34px solid transparent;
-      border-top:84px solid var(--gold);
+      border-left:36px solid transparent;
+      border-right:36px solid transparent;
+      border-top:92px solid var(--gold);
       z-index:6;
-      filter:drop-shadow(0 2px 4px rgba(0,0,0,.35));
+      filter:drop-shadow(0 2px 6px rgba(0,0,0,.45));
     }
 
     .pointer::after{
       content:"";
       position:absolute;
       left:-12px;
-      top:-84px;
+      top:-92px;
       width:24px;
       height:24px;
       border-radius:50%;
-      background:#fff7d2;
+      background:#f6eab2;
     }
 
     .wheel-wrap{
@@ -233,8 +256,8 @@
       height:100%;
       border-radius:50%;
       padding:14px;
-      background:linear-gradient(135deg, #f3f5fb, #c8d0df 35%, #f4d66a 55%, #f2f5fb 100%);
-      box-shadow:0 10px 30px rgba(0,0,0,.25);
+      background:linear-gradient(135deg, #d3d9e5, #f0f3f9 30%, #b9c0ce 60%, #d8b11e 100%);
+      box-shadow:0 10px 28px rgba(0,0,0,.28);
     }
 
     .wheel{
@@ -246,7 +269,7 @@
       transform:translateZ(0);
       will-change:transform;
       backface-visibility:hidden;
-      transition:transform 5.4s cubic-bezier(.12,.82,.18,1);
+      transition:transform 5.6s cubic-bezier(.12,.82,.18,1);
     }
 
     .wheel::after{
@@ -254,31 +277,32 @@
       position:absolute;
       inset:0;
       border-radius:50%;
-      box-shadow:inset 0 0 0 2px rgba(255,255,255,.08);
+      box-shadow:inset 0 0 0 2px rgba(255,255,255,.05);
       pointer-events:none;
     }
 
-    .label{
+    .slice{
       position:absolute;
       inset:0;
       transform-origin:50% 50%;
       pointer-events:none;
     }
 
-    .label span{
+    .slice span{
       position:absolute;
-      left:50%;
-      top:24%;
-      width:24%;
-      transform:translate(-50%, -50%);
-      color:#fff;
+      left:68%;
+      top:50%;
+      width:42%;
+      transform:translate(-50%, -50%) rotate(var(--counter));
+      color:#f7fbff;
       font-weight:800;
-      font-size:clamp(13px, 1.45vh, 24px);
-      line-height:1.05;
+      font-size:clamp(15px, 1.35vh, 24px);
+      line-height:1;
       text-transform:uppercase;
       text-align:center;
       letter-spacing:.02em;
-      text-shadow:0 2px 6px rgba(0,0,0,.55);
+      white-space:nowrap;
+      text-shadow:0 2px 5px rgba(0,0,0,.6);
     }
 
     .hub{
@@ -286,12 +310,12 @@
       width:17%;
       aspect-ratio:1;
       border-radius:50%;
-      background:linear-gradient(180deg, #fff2b3 0%, #dfb100 45%, #9b7300 100%);
+      background:linear-gradient(180deg, #f2e7aa 0%, #cda21b 45%, #876300 100%);
       display:grid;
       place-items:center;
       z-index:4;
-      border:6px solid rgba(255,255,255,.16);
-      box-shadow:0 4px 12px rgba(0,0,0,.22);
+      border:6px solid rgba(255,255,255,.14);
+      box-shadow:0 4px 10px rgba(0,0,0,.22);
     }
 
     .hub::after{
@@ -299,12 +323,17 @@
       font-size:clamp(14px, 1vw, 22px);
       font-weight:800;
       letter-spacing:.15em;
-      color:#2e1d00;
+      color:#261800;
     }
 
     .footerbar{
       padding:12px 16px;
       text-align:center;
+    }
+
+    @keyframes screenFlash{
+      0%,100%{ opacity:0; }
+      50%{ opacity:.22; }
     }
 
     @media (max-width: 1200px){
@@ -333,7 +362,7 @@
       }
 
       .wheel-stage{
-        width:min(76vw, 70vh, 900px);
+        width:min(70vw, 66vh, 820px);
       }
     }
 
@@ -352,21 +381,23 @@
       }
 
       .wheel-stage{
-        width:min(94vw, 58vh);
+        width:min(92vw, 56vh);
       }
 
       .prize-item{
         font-size:20px;
       }
 
-      .label span{
-        width:28%;
-        font-size:clamp(11px, 1.25vh, 18px);
+      .slice span{
+        width:46%;
+        font-size:clamp(11px, 1.1vh, 16px);
       }
     }
   </style>
 </head>
 <body>
+  <div class="flash" id="flash"></div>
+
   <div class="app">
     <header class="topbar">
       <div class="brand">
@@ -383,11 +414,11 @@
       <aside class="left-panel">
         <h2 class="panel-title">Prémios</h2>
         <div class="prize-list">
-          <div class="prize-item"><span class="dot" style="background:#ffd300"></span><span>5 shots jagger</span></div>
-          <div class="prize-item"><span class="dot" style="background:#e21b4d"></span><span>5 finos</span></div>
-          <div class="prize-item"><span class="dot" style="background:#4f7fe0"></span><span>1 shot jagger</span></div>
-          <div class="prize-item"><span class="dot" style="background:#dfe9ff"></span><span>1 fino</span></div>
-          <div class="prize-item"><span class="dot" style="background:#7f8fb8"></span><span>Tenta outra vez</span></div>
+          <div class="prize-item"><span class="dot" style="color:#d8b11e;background:#d8b11e"></span><span>5 shots jagger</span></div>
+          <div class="prize-item"><span class="dot" style="color:#c11f45;background:#c11f45"></span><span>5 finos</span></div>
+          <div class="prize-item"><span class="dot" style="color:#146158;background:#146158"></span><span>1 shot jagger</span></div>
+          <div class="prize-item"><span class="dot" style="color:#2f6d67;background:#2f6d67"></span><span>1 fino</span></div>
+          <div class="prize-item"><span class="dot" style="color:#355182;background:#355182"></span><span>Tenta outra vez</span></div>
         </div>
       </aside>
 
@@ -408,20 +439,22 @@
 
   <script>
     const wheel = document.getElementById('wheel');
+    const flash = document.getElementById('flash');
 
     const segments = [
-      { label: '5 SHOTS<br>JAGGER', color: '#d4a800' },
-      { label: 'TENTA<br>OUTRA<br>VEZ', color: '#16305e' },
-      { label: '5<br>FINOS', color: '#e21b4d' },
-      { label: 'TENTA<br>OUTRA<br>VEZ', color: '#223971' },
-      { label: '1 SHOT<br>JAGGER', color: '#4f7fe0' },
-      { label: '1<br>FINO', color: '#6f95ef' },
-      { label: 'TENTA<br>OUTRA<br>VEZ', color: '#17305f' }
+      { label: '5 SHOTS JAGGER', color: '#8d1832' },
+      { label: 'TENTA OUTRA VEZ', color: '#153154' },
+      { label: '5 FINOS', color: '#0f4f49' },
+      { label: 'TENTA OUTRA VEZ', color: '#102949' },
+      { label: '1 SHOT JAGGER', color: '#a21c3d' },
+      { label: '1 FINO', color: '#146158' },
+      { label: 'TENTA OUTRA VEZ', color: '#183764' }
     ];
 
     const segmentAngle = 360 / segments.length;
     let spinning = false;
     let totalRotation = 0;
+    let spinTimeout = null;
 
     function norm(deg) {
       return ((deg % 360) + 360) % 360;
@@ -438,18 +471,18 @@
       wheel.innerHTML = '';
 
       for (let i = 0; i < segments.length; i++) {
-        const item = segments[i];
-        const centerAngle = (i * segmentAngle) + (segmentAngle / 2);
+        const centerAngle = i * segmentAngle + segmentAngle / 2;
 
-        const label = document.createElement('div');
-        label.className = 'label';
-        label.style.transform = `rotate(${centerAngle}deg)`;
+        const slice = document.createElement('div');
+        slice.className = 'slice';
+        slice.style.transform = `rotate(${centerAngle}deg)`;
 
         const span = document.createElement('span');
-        span.innerHTML = item.label;
+        span.innerHTML = segments[i].label;
+        span.style.setProperty('--counter', `${-centerAngle}deg`);
 
-        label.appendChild(span);
-        wheel.appendChild(label);
+        slice.appendChild(span);
+        wheel.appendChild(slice);
       }
     }
 
@@ -462,18 +495,31 @@
       return totalRotation + extraTurns + delta;
     }
 
+    function endSpin() {
+      if (!spinning) return;
+      spinning = false;
+      flash.classList.remove('active');
+      if (spinTimeout) {
+        clearTimeout(spinTimeout);
+        spinTimeout = null;
+      }
+    }
+
     function spin() {
       if (spinning) return;
       spinning = true;
 
       const index = Math.floor(Math.random() * segments.length);
       totalRotation = targetRotationForIndex(index);
+
+      flash.classList.add('active');
       wheel.style.transform = `translateZ(0) rotate(${totalRotation}deg)`;
+
+      if (spinTimeout) clearTimeout(spinTimeout);
+      spinTimeout = setTimeout(endSpin, 5900);
     }
 
-    wheel.addEventListener('transitionend', () => {
-      spinning = false;
-    });
+    wheel.addEventListener('transitionend', endSpin);
 
     buildWheel();
 
