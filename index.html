@@ -1,233 +1,485 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-PT">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roleta CHEERS O BAR</title>
-    <style>
-        /* Estilos otimizados para TV (Tela Grande) */
-        body {
-            background-color: #1a1a1a; /* Fundo escuro para contraste */
-            color: white;
-            font-family: 'Arial Black', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden; /* Evita barras de rolagem */
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Cheers O Bar - Roleta Red Bull Lite</title>
+  <style>
+    :root{
+      --bg:#050914;
+      --bg2:#0a1631;
+      --gold:#ffd300;
+      --red:#e21b4d;
+      --blue:#223971;
+      --blue2:#17305f;
+      --text:#f4f7ff;
+      --muted:#b9c3de;
+      --panel:rgba(255,255,255,.06);
+      --line:rgba(255,255,255,.08);
+    }
 
-        h1 {
-            font-size: 4em;
-            color: #ffcc00; /* Amarelo vibrante */
-            text-shadow: 3px 3px 5px #000;
-            margin-bottom: 20px;
-        }
+    *{
+      box-sizing:border-box;
+      user-select:none;
+      -webkit-user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-        /* Container da Roleta */
-        .wheel-container {
-            position: relative;
-            width: 80vw; /* Ocupa 80% da largura da TV */
-            max-width: 1000px; /* Limite máximo para não ficar gigante demais */
-            height: 80vw;
-            max-height: 800px;
-            border: 10px solid #ffcc00;
-            border-radius: 50%;
-            box-shadow: 0 0 30px rgba(255, 204, 0, 0.5);
-            transition: transform 5s cubic-bezier(0.1, 0.9, 0.4, 1); /* Transição suave para a rotação */
-        }
+    html,body{
+      margin:0;
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      background:#000;
+    }
 
-        /* Setas de Indicação */
-        .pointer {
-            position: absolute;
-            top: -30px; /* Posição acima da roleta */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-top: 40px solid #ff0000; /* Vermelho chamativo */
-            z-index: 10;
-        }
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255,211,0,.08), transparent 18%),
+        radial-gradient(circle at 15% 20%, rgba(226,27,77,.08), transparent 22%),
+        radial-gradient(circle at 85% 20%, rgba(34,57,113,.16), transparent 26%),
+        linear-gradient(180deg, #02050b 0%, #07101d 55%, #03060d 100%);
+      cursor:none;
+    }
 
-        /* As Fatias da Roleta */
-        .slice {
-            position: absolute;
-            width: 50%;
-            height: 50%;
-            top: 0;
-            left: 50%;
-            transform-origin: 0 100%; /* Ponto de rotação */
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5em;
-            font-weight: bold;
-            color: white;
-            text-shadow: 2px 2px 4px #000;
-        }
+    .app{
+      width:100vw;
+      height:100vh;
+      padding:12px;
+      display:grid;
+      grid-template-rows:auto 1fr auto;
+      gap:12px;
+    }
 
-        /* Cores das Fatias */
-        .slice:nth-child(1) { background: #e74c3c; transform: rotate(0deg) skewY(60deg); } /* 5 Finos */
-        .slice:nth-child(2) { background: #3498db; transform: rotate(60deg) skewY(60deg); } /* 3 Finos */
-        .slice:nth-child(3) { background: #2ecc71; transform: rotate(120deg) skewY(60deg); } /* 1 Fino */
-        .slice:nth-child(4) { background: #f1c40f; transform: rotate(180deg) skewY(60deg); } /* 1 Fino */
-        .slice:nth-child(5) { background: #9b59b6; transform: rotate(240deg) skewY(60deg); } /* Tenta Outra Vez */
-        .slice:nth-child(6) { background: #e67e22; transform: rotate(300deg) skewY(60deg); } /* 5 Finos (Repetição para fechar o círculo) */
+    .topbar,
+    .left-panel,
+    .footerbar{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:20px;
+    }
 
-        /* Ajuste de texto dentro das fatias (para que o texto fique legível) */
-        .slice span {
-            transform: skewY(-60deg) rotate(30deg); /* Desfaz o skew e ajusta a rotação */
-            display: block;
-            width: 100%;
-            text-align: center;
-            padding: 10px;
-        }
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px 18px;
+      gap:18px;
+    }
 
-        /* Botão de Iniciar */
-        .start-button {
-            margin-top: 40px;
-            padding: 20px 50px;
-            font-size: 2.5em;
-            background-color: #ffcc00;
-            color: #1a1a1a;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
 
-        .start-button:hover {
-            background-color: #fff;
-        }
+    .mark{
+      width:52px;
+      height:52px;
+      border-radius:50%;
+      position:relative;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,211,0,.95) 0 30%, transparent 31%),
+        linear-gradient(145deg, rgba(255,255,255,.14), rgba(255,255,255,.04));
+      border:1px solid rgba(255,255,255,.14);
+      flex:0 0 auto;
+    }
 
-        .start-button:disabled {
-            background-color: #7f8c8d;
-            cursor: not-allowed;
-        }
+    .mark::before,
+    .mark::after{
+      content:"";
+      position:absolute;
+      top:20px;
+      width:16px;
+      height:10px;
+      background:var(--red);
+      border-radius:18px 18px 4px 4px;
+    }
 
-        /* Mensagem de Resultado */
-        #result-message {
-            margin-top: 30px;
-            font-size: 3em;
-            height: 50px; /* Reserva espaço para não pular o layout */
-            color: #2ecc71;
-        }
-    </style>
+    .mark::before{
+      left:10px;
+      transform:rotate(18deg);
+    }
+
+    .mark::after{
+      right:10px;
+      transform:rotate(-18deg);
+    }
+
+    .title small,
+    .footerbar{
+      display:block;
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      color:var(--muted);
+      font-size:11px;
+    }
+
+    .title strong,
+    .cta{
+      display:block;
+      text-transform:uppercase;
+      line-height:1;
+      font-weight:800;
+    }
+
+    .title strong{
+      font-size:clamp(22px, 1.7vw, 32px);
+      letter-spacing:.04em;
+    }
+
+    .cta{
+      font-size:clamp(22px, 1.7vw, 32px);
+      text-align:right;
+      white-space:nowrap;
+    }
+
+    .main{
+      min-height:0;
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:16px;
+    }
+
+    .left-panel{
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .panel-title{
+      margin:0 0 14px;
+      font-size:14px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.18em;
+    }
+
+    .prize-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .prize-item{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:14px;
+      border-radius:16px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.05);
+      font-size:22px;
+      font-weight:700;
+    }
+
+    .dot{
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      flex:0 0 auto;
+    }
+
+    .arena{
+      min-height:0;
+      border-radius:32px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.02);
+      display:grid;
+      place-items:center;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .wheel-stage{
+      position:relative;
+      width:min(80vh, 76vw, 1120px);
+      aspect-ratio:1;
+      display:grid;
+      place-items:center;
+    }
+
+    .pointer{
+      position:absolute;
+      top:-8px;
+      left:50%;
+      transform:translateX(-50%);
+      width:0;
+      height:0;
+      border-left:34px solid transparent;
+      border-right:34px solid transparent;
+      border-top:84px solid var(--gold);
+      z-index:6;
+      filter:drop-shadow(0 2px 4px rgba(0,0,0,.35));
+    }
+
+    .pointer::after{
+      content:"";
+      position:absolute;
+      left:-12px;
+      top:-84px;
+      width:24px;
+      height:24px;
+      border-radius:50%;
+      background:#fff7d2;
+    }
+
+    .wheel-wrap{
+      position:relative;
+      width:100%;
+      height:100%;
+      border-radius:50%;
+      padding:14px;
+      background:linear-gradient(135deg, #f3f5fb, #c8d0df 35%, #f4d66a 55%, #f2f5fb 100%);
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+    }
+
+    .wheel{
+      position:relative;
+      width:100%;
+      height:100%;
+      border-radius:50%;
+      overflow:hidden;
+      transform:translateZ(0);
+      will-change:transform;
+      backface-visibility:hidden;
+      transition:transform 5.4s cubic-bezier(.12,.82,.18,1);
+    }
+
+    .wheel::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:50%;
+      box-shadow:inset 0 0 0 2px rgba(255,255,255,.08);
+      pointer-events:none;
+    }
+
+    .label{
+      position:absolute;
+      inset:0;
+      transform-origin:50% 50%;
+      pointer-events:none;
+    }
+
+    .label span{
+      position:absolute;
+      left:50%;
+      top:24%;
+      width:24%;
+      transform:translate(-50%, -50%);
+      color:#fff;
+      font-weight:800;
+      font-size:clamp(13px, 1.45vh, 24px);
+      line-height:1.05;
+      text-transform:uppercase;
+      text-align:center;
+      letter-spacing:.02em;
+      text-shadow:0 2px 6px rgba(0,0,0,.55);
+    }
+
+    .hub{
+      position:absolute;
+      width:17%;
+      aspect-ratio:1;
+      border-radius:50%;
+      background:linear-gradient(180deg, #fff2b3 0%, #dfb100 45%, #9b7300 100%);
+      display:grid;
+      place-items:center;
+      z-index:4;
+      border:6px solid rgba(255,255,255,.16);
+      box-shadow:0 4px 12px rgba(0,0,0,.22);
+    }
+
+    .hub::after{
+      content:"CHEERS";
+      font-size:clamp(14px, 1vw, 22px);
+      font-weight:800;
+      letter-spacing:.15em;
+      color:#2e1d00;
+    }
+
+    .footerbar{
+      padding:12px 16px;
+      text-align:center;
+    }
+
+    @media (max-width: 1200px){
+      .main{
+        grid-template-columns:260px 1fr;
+      }
+    }
+
+    @media (max-width: 980px){
+      .topbar{
+        flex-direction:column;
+        text-align:center;
+      }
+
+      .brand{
+        justify-content:center;
+      }
+
+      .cta{
+        text-align:center;
+        white-space:normal;
+      }
+
+      .main{
+        grid-template-columns:1fr;
+      }
+
+      .wheel-stage{
+        width:min(76vw, 70vh, 900px);
+      }
+    }
+
+    @media (max-width: 760px){
+      body{
+        cursor:default;
+      }
+
+      html,body{
+        overflow:auto;
+      }
+
+      .app{
+        height:auto;
+        min-height:100vh;
+      }
+
+      .wheel-stage{
+        width:min(94vw, 58vh);
+      }
+
+      .prize-item{
+        font-size:20px;
+      }
+
+      .label span{
+        width:28%;
+        font-size:clamp(11px, 1.25vh, 18px);
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark" aria-hidden="true"></div>
+        <div class="title">
+          <small>Cheers O Bar</small>
+          <strong>Roleta Red Bull</strong>
+        </div>
+      </div>
+      <div class="cta">Pede pack ou régua e gira</div>
+    </header>
 
-    <h1>CHEERS O BAR</h1>
-    <p style="font-size: 1.5em; margin-bottom: 10px;">Clique para girar a roleta!</p>
+    <main class="main">
+      <aside class="left-panel">
+        <h2 class="panel-title">Prémios</h2>
+        <div class="prize-list">
+          <div class="prize-item"><span class="dot" style="background:#ffd300"></span><span>5 shots jagger</span></div>
+          <div class="prize-item"><span class="dot" style="background:#e21b4d"></span><span>5 finos</span></div>
+          <div class="prize-item"><span class="dot" style="background:#4f7fe0"></span><span>1 shot jagger</span></div>
+          <div class="prize-item"><span class="dot" style="background:#dfe9ff"></span><span>1 fino</span></div>
+          <div class="prize-item"><span class="dot" style="background:#7f8fb8"></span><span>Tenta outra vez</span></div>
+        </div>
+      </aside>
 
-    <div class="wheel-container" id="wheel">
-        <div class="pointer"></div>
-        <!-- As 6 fatias -->
-        <div class="slice" style="--i:0;"><span>5 FINOS</span></div>
-        <div class="slice" style="--i:1;"><span>3 FINOS</span></div>
-        <div class="slice" style="--i:2;"><span>1 FINO</span></div>
-        <div class="slice" style="--i:3;"><span>1 FINO</span></div>
-        <div class="slice" style="--i:4;"><span>TENTA OUTRA</span></div>
-        <div class="slice" style="--i:5;"><span>5 FINOS</span></div>
-    </div>
+      <section class="arena">
+        <div class="wheel-stage">
+          <div class="pointer"></div>
 
-    <button class="start-button" id="spinButton">GIRAR!</button>
-    <div id="result-message"></div>
+          <div class="wheel-wrap">
+            <div class="wheel" id="wheel"></div>
+            <div class="hub"></div>
+          </div>
+        </div>
+      </section>
+    </main>
 
-    <script>
-        const wheel = document.getElementById('wheel');
-        const spinButton = document.getElementById('spinButton');
-        const resultMessage = document.getElementById('result-message');
+    <div class="footerbar">O prémio é o que estiver na seta quando a roleta parar</div>
+  </div>
 
-        // Definição dos prêmios (6 fatias)
-        const prizes = [
-            "5 FINOS", 
-            "3 FINOS", 
-            "1 FINO", 
-            "1 FINO", 
-            "TENTA OUTRA", 
-            "5 FINOS"
-        ];
+  <script>
+    const wheel = document.getElementById('wheel');
 
-        // O número de fatias é 6. Cada fatia ocupa 360/6 = 60 graus.
-        const numSlices = prizes.length;
-        const sliceAngle = 360 / numSlices;
+    const segments = [
+      { label: '5 SHOTS<br>JAGGER', color: '#d4a800' },
+      { label: 'TENTA<br>OUTRA<br>VEZ', color: '#16305e' },
+      { label: '5<br>FINOS', color: '#e21b4d' },
+      { label: 'TENTA<br>OUTRA<br>VEZ', color: '#223971' },
+      { label: '1 SHOT<br>JAGGER', color: '#4f7fe0' },
+      { label: '1<br>FINO', color: '#6f95ef' },
+      { label: 'TENTA<br>OUTRA<br>VEZ', color: '#17305f' }
+    ];
 
-        // Função para calcular a rotação final
-        function spinWheel() {
-            spinButton.disabled = true;
-            resultMessage.textContent = "Girando...";
+    const segmentAngle = 360 / segments.length;
+    let spinning = false;
+    let totalRotation = 0;
 
-            // 1. Escolhe um índice aleatório (0 a 5)
-            const randomIndex = Math.floor(Math.random() * numSlices);
-            
-            // 2. Calcula o ângulo para que o prêmio caia no ponteiro (topo)
-            // O ponteiro está no topo (0 graus).
-            // O ângulo de cada fatia é 60, 60+60, 6+6+6...
-            // Queremos que o centro da fatia sorteada chegue ao topo.
-            // O ângulo de cada fatia é 60 graus.
-            // O ponteiro está no topo (0 graus).
-            // Para o prêmio 'i' cair no topo, precisamos girar:
-            // (360 - (i * 60)) + (algum número de voltas completas)
-            
-            
-            // Vamos simplificar: queremos que o centro da fatia sorteada chegue ao topo.
-            // O centro da fatia 'i' está em (i * 60) + (30 graus.
-            // Para que o centro chegue ao topo (0), precisamos girar:
-            // 3660 - (i * 60)
-            
-            // Adicionamos 5 voltas completas (5 * 360 = 18180) para garantir que a animação seja longa e visível
-            const extraRotations = 5 * 3660; 
-            
-            // O ângulo de cada fatia é 60 graus. O ponteiro está no topo (0 graus).
-            
-            // O ângulo de cada fatia é 60 graus. O ponteiro está no topo (0 graus).
-            // Para o prêmio 'i' cair no topo, precisamos girar:
-            // (360 - (i * 60)) + (algum número de voltas completas)
-            
-            
-            // O ângulo de cada fatia é 60 graus. O ponteiro está no topo (0 graus).
-            
-            // O ângulo de cada fatia é 60 graus. O ponteiro está no topo (0 graus).
-            // Para o prêmio 'i' cair no topo, precisamos girar:            // (3660 - (i * 60)) + (algum número de voltas completas)
-            
-            
-            // Vamos usar a lógica de rotação total:
-            // 1. Ângulo base da fatia sorteada: (randomIndex * sliceAngle)
-            
-            // 2. Ângulo para centralizar a fatia no topo: sliceAngle / 2 (30 graus)
-            
-            
-            // 3. Rotação total = (Voltas Completas * 360) + (Ângulo Base) + (Ângulo Central)
-            
-            
-            const targetAngle = (randomIndex * sliceAngle) + (sliceAngle / 2) + (5 * 3660);
-            
-            // Aplicar a rotação
-            wheel.style.transform = `rotate(${targetAngle}deg)`;
+    function norm(deg) {
+      return ((deg % 360) + 360) % 360;
+    }
 
-            // 3. Esperar a animação terminar (5 segundos)
-            setTimeout(() => {
-                
-                // 4. Mostrar resultado
-                const prize = prizes[randomIndex];
-                resultMessage.textContent = `🎉 ${prize} 🎉`;
-                
-                // Resetar a rotação para o estado inicial (opcional, mas bom para o próximo giro)
-                wheel.style.transform = `rotate(0deg)`;
-                
-                spinButton.disabled = false;
-            }, 5000); // 5 segundos de animação
-        }
+    function buildWheel() {
+      const gradient = segments.map((seg, i) => {
+        const start = i * segmentAngle;
+        const end = start + segmentAngle;
+        return `${seg.color} ${start}deg ${end}deg`;
+      }).join(',');
 
-        // Event Listener
-        spinButton.addEventListener('click', spinWheel);
+      wheel.style.background = `conic-gradient(from 0deg, ${gradient})`;
+      wheel.innerHTML = '';
 
-    </script>
+      for (let i = 0; i < segments.length; i++) {
+        const item = segments[i];
+        const centerAngle = (i * segmentAngle) + (segmentAngle / 2);
+
+        const label = document.createElement('div');
+        label.className = 'label';
+        label.style.transform = `rotate(${centerAngle}deg)`;
+
+        const span = document.createElement('span');
+        span.innerHTML = item.label;
+
+        label.appendChild(span);
+        wheel.appendChild(label);
+      }
+    }
+
+    function targetRotationForIndex(index) {
+      const current = norm(totalRotation);
+      const centerAngle = index * segmentAngle + segmentAngle / 2;
+      const target = norm(360 - centerAngle);
+      const delta = norm(target - current);
+      const extraTurns = (6 + Math.floor(Math.random() * 2)) * 360;
+      return totalRotation + extraTurns + delta;
+    }
+
+    function spin() {
+      if (spinning) return;
+      spinning = true;
+
+      const index = Math.floor(Math.random() * segments.length);
+      totalRotation = targetRotationForIndex(index);
+      wheel.style.transform = `translateZ(0) rotate(${totalRotation}deg)`;
+    }
+
+    wheel.addEventListener('transitionend', () => {
+      spinning = false;
+    });
+
+    buildWheel();
+
+    window.addEventListener('keydown', spin, { passive: true });
+    document.addEventListener('mousedown', spin, { passive: true });
+    document.addEventListener('touchstart', spin, { passive: true });
+  </script>
 </body>
 </html>
